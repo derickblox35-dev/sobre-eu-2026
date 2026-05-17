@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Derick — Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080810;
+      --surface: #0f0f1a;
+      --accent: #b4f0ff;
+      --accent2: #ff6ef7;
+      --accent3: #ffe26e;
+      --text: #e8e8f0;
+      --muted: #6a6a80;
+      --glow: rgba(180,240,255,0.18);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.08s ease;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      width: 38px; height: 38px;
+      border: 1.5px solid var(--accent2);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.22s ease, opacity 0.2s;
+      mix-blend-mode: screen;
+      opacity: 0.6;
+    }
+
+    /* Noise grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1000; opacity: 0.55;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 30%, rgba(180,240,255,0.07) 0%, transparent 70%),
+                  radial-gradient(ellipse 50% 50% at 20% 80%, rgba(255,110,247,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse 40% 40% at 80% 80%, rgba(255,226,110,0.05) 0%, transparent 60%);
+    }
+
+    /* Floating decorative lines */
+    .line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      height: 1px;
+      opacity: 0.18;
+      animation: lineDrift 8s ease-in-out infinite;
+    }
+    .line:nth-child(1) { width: 70%; top: 22%; left: -10%; animation-delay: 0s; }
+    .line:nth-child(2) { width: 40%; top: 55%; left: 30%; animation-delay: -3s; background: linear-gradient(90deg, transparent, var(--accent2), transparent); }
+    .line:nth-child(3) { width: 55%; top: 78%; left: -5%; animation-delay: -5s; background: linear-gradient(90deg, transparent, var(--accent3), transparent); }
+    @keyframes lineDrift {
+      0%, 100% { transform: translateX(0); opacity: 0.18; }
+      50% { transform: translateX(30px); opacity: 0.28; }
+    }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(8,8,16,0.6);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-shadow: 0 0 30px rgba(180,240,255,0.5);
+    }
+
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hero content */
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 140px 80px 80px;
+      position: relative; z-index: 2;
+    }
+
+    .hero-text { }
+
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--accent2);
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 10vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: #fff;
+      position: relative;
+    }
+
+    .hero-name .outline {
+      -webkit-text-stroke: 1.5px var(--accent);
+      color: transparent;
+      display: block;
+    }
+
+    .hero-name .glow-text {
+      display: block;
+      text-shadow: 0 0 60px rgba(180,240,255,0.6), 0 0 120px rgba(180,240,255,0.2);
+    }
+
+    .hero-desc {
+      margin-top: 32px;
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: rgba(232,232,240,0.72);
+      max-width: 480px;
+      font-weight: 300;
+    }
+
+    .hero-desc strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .hero-tags {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .tag {
+      padding: 6px 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: all 0.3s;
+      backdrop-filter: blur(6px);
+    }
+    .tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(180,240,255,0.06);
+      box-shadow: 0 0 20px rgba(180,240,255,0.1);
+    }
+
+    .tag.y { border-color: rgba(255,80,80,0.4); color: rgba(255,80,80,0.8); }
+    .tag.t { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); }
+    .tag.r { border-color: rgba(255,226,110,0.4); color: rgba(255,226,110,0.7); }
+    .tag.e { border-color: rgba(255,110,247,0.4); color: rgba(255,110,247,0.7); }
+
+    /* Photo stack */
+    .hero-photos {
+      position: relative;
+      height: 580px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .photo-card {
+      position: absolute;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      transition: transform 0.5s cubic-bezier(.23,1,.32,1);
+    }
+
+    .photo-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-card.top {
+      width: 280px; height: 360px;
+      transform: rotate(-4deg) translateX(40px);
+      z-index: 2;
+      border: 1px solid rgba(180,240,255,0.15);
+    }
+    .photo-card.top:hover { transform: rotate(-2deg) translateX(40px) scale(1.03); }
+
+    .photo-card.bottom {
+      width: 260px; height: 340px;
+      transform: rotate(5deg) translateX(-30px) translateY(20px);
+      z-index: 1;
+      border: 1px solid rgba(255,110,247,0.15);
+      filter: brightness(0.85);
+    }
+    .photo-card.bottom:hover { transform: rotate(3deg) translateX(-30px) translateY(20px) scale(1.03); filter: brightness(1); }
+
+    /* Decorative circle */
+    .deco-circle {
+      position: absolute;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      border: 1px solid rgba(180,240,255,0.07);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: rotate 20s linear infinite;
+    }
+    .deco-circle::before {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      top: -4px; left: 50%;
+      box-shadow: 0 0 16px var(--accent);
+    }
+    @keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* ── ABOUT BAND ── */
+    .band {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      padding: 16px 0;
+      background: rgba(255,255,255,0.02);
+      white-space: nowrap;
+    }
+
+    .band-track {
+      display: inline-flex; gap: 60px;
+      animation: ticker 18s linear infinite;
+    }
+
+    .band-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      color: var(--muted);
+    }
+    .band-item span { color: var(--accent2); margin-right: 60px; }
+
+    @keyframes ticker { to { transform: translateX(-50%); } }
+
+    /* ── ABOUT SECTION ── */
+    .about {
+      padding: 100px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+    }
+
+    .about::before {
+      content: 'SOBRE';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14rem;
+      color: rgba(255,255,255,0.02);
+      top: 0; right: 40px;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 18px;
+    }
+
+    .about-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      margin-bottom: 28px;
+    }
+
+    .about-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: rgba(232,232,240,0.5);
+      border-left: 2px solid var(--accent2);
+      padding-left: 20px;
+      margin-bottom: 28px;
+    }
+
+    .about-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(232,232,240,0.65);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .stat-card:hover { border-color: rgba(180,240,255,0.2); transform: translateY(-4px); }
+    .stat-card:hover::before { opacity: 1; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── PLATFORMS ── */
+    .platforms {
+      padding: 80px;
+      background: linear-gradient(180deg, transparent, rgba(180,240,255,0.03), transparent);
+    }
+
+    .platforms-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .platforms-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.05em;
+    }
+
+    .platform-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .platform-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(.23,1,.32,1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .platform-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+      border-radius: 16px;
+    }
+
+    .platform-card.yt::after { background: radial-gradient(ellipse at 50% 100%, rgba(255,60,60,0.12), transparent 70%); }
+    .platform-card.tt::after { background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.06), transparent 70%); }
+    .platform-card.rb::after { background: radial-gradient(ellipse at 50% 100%, rgba(255,226,110,0.1), transparent 70%); }
+
+    .platform-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.12); }
+    .platform-card:hover::after { opacity: 1; }
+
+    .platform-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .platform-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .platform-card.yt .platform-name { color: #ff4444; }
+    .platform-card.tt .platform-name { color: #e8e8f0; }
+    .platform-card.rb .platform-name { color: var(--accent3); }
+
+    .platform-handle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+    }
+
+    .platform-desc {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: rgba(232,232,240,0.5);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 60px 80px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center; justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(180,240,255,0.3);
+    }
+
+    .footer-text {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.23,1,.32,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* Floating dots */
+    .dot {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatDot 6s ease-in-out infinite;
+      opacity: 0.25;
+    }
+    @keyframes floatDot {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-content, .about, .platform-cards { grid-template-columns: 1fr; }
+      .hero-content { padding: 120px 32px 60px; }
+      .about { padding: 60px 32px; }
+      .platforms { padding: 60px 32px; }
+      footer { padding: 40px 32px; flex-direction: column; gap: 20px; text-align: center; }
+      .nav { padding: 20px 28px; }
+      .hero-photos { height: 400px; }
+      .photo-card.top { width: 200px; height: 260px; }
+      .photo-card.bottom { width: 180px; height: 230px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="ring"></div>
+
+  <!-- Floating ambient dots -->
+  <div class="dot" style="width:6px;height:6px;background:var(--accent);top:15%;left:8%;animation-delay:0s;animation-duration:7s;"></div>
+  <div class="dot" style="width:4px;height:4px;background:var(--accent2);top:40%;left:92%;animation-delay:-2s;animation-duration:5s;"></div>
+  <div class="dot" style="width:5px;height:5px;background:var(--accent3);top:70%;left:5%;animation-delay:-4s;animation-duration:9s;"></div>
+  <div class="dot" style="width:3px;height:3px;background:var(--accent);top:85%;left:80%;animation-delay:-1s;animation-duration:6s;"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">DERICK</div>
+    <ul class="nav-links">
+      <li><a href="#about">Sobre</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-text reveal">
+        <div class="hero-label">Content Creator & Editor</div>
+        <h1 class="hero-name">
+          <span class="glow-text">DERI</span>
+          <span class="outline">CK</span>
+        </h1>
+        <p class="hero-desc">
+          Derick é um influenciador que faz <strong>edits</strong>, <strong>vídeos de Roblox</strong>, que originalmente o nome do canal do YouTube foi <strong>"DerickBlox"</strong>, e ele faz vídeos no <strong>TikTok</strong>, <strong>YouTube</strong>.
+        </p>
+        <div class="hero-tags">
+          <span class="tag y">▶ YouTube</span>
+          <span class="tag t">♪ TikTok</span>
+          <span class="tag r">🎮 Roblox</span>
+          <span class="tag e">✦ Edits</span>
+        </div>
+      </div>
+
+      <div class="hero-photos reveal" style="transition-delay:0.2s">
+        <div class="deco-circle"></div>
+        <div class="photo-card bottom">
+          <img src="https://i.ibb.co/ybhKwwg/Captura-de-tela-2026-05-16-202357.png" alt="Derick decoração"/>
+        </div>
+        <div class="photo-card top">
+          <img src="https://i.ibb.co/bjh0f5vH/Captura-de-tela-2026-05-17-115037.png" alt="Derick"/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BAND -->
+  <div class="band">
+    <div class="band-track">
+      <span class="band-item"><span>✦</span> YOUTUBER</span>
+      <span class="band-item"><span>✦</span> TIKTOKER</span>
+      <span class="band-item"><span>✦</span> ROBLOX</span>
+      <span class="band-item"><span>✦</span> EDITOR</span>
+      <span class="band-item"><span>✦</span> DERICKBLOX</span>
+      <span class="band-item"><span>✦</span> CONTENT CREATOR</span>
+      <span class="band-item"><span>✦</span> YOUTUBER</span>
+      <span class="band-item"><span>✦</span> TIKTOKER</span>
+      <span class="band-item"><span>✦</span> ROBLOX</span>
+      <span class="band-item"><span>✦</span> EDITOR</span>
+      <span class="band-item"><span>✦</span> DERICKBLOX</span>
+      <span class="band-item"><span>✦</span> CONTENT CREATOR</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="reveal">
+      <div class="section-label">✦ Quem é</div>
+      <h2 class="about-heading">O CRIADOR<br/>POR TRÁS<br/>DO CONTEÚDO</h2>
+      <div class="about-quote">"Começou como DerickBlox e se tornou muito mais."</div>
+      <p class="about-body">
+        Derick é um criador de conteúdo apaixonado por Roblox e edição de vídeos. Com um estilo único e criativo, conquista a audiência de Derick tanto no YouTube quanto no TikTok, produzindo edits e vídeos de gameplay que fazem as pessoas quererem sempre mais.
+      </p>
+    </div>
+    <div class="stat-grid reveal" style="transition-delay:0.15s">
+      <div class="stat-card">
+        <div class="stat-num">2+</div>
+        <div class="stat-label">Plataformas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Edits Criados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Dedicação</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">↑</div>
+        <div class="stat-label">Em crescimento</div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">DERICK</div>
+    <div class="footer-text">© 2026 · Content Creator · DerickBlox</div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+
+    function animRing() {
+      rx += (mx - rx) * 0.1;
+      ry += (my - ry) * 0.1;
+      ring.style.transform = `translate(${rx - 19}px, ${ry - 19}px)`;
+      requestAnimationFrame(animRing);
+    }
+    animRing();
+
+    document.querySelectorAll('a, button, .tag, .stat-card, .platform-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform += ' scale(1.8)';
+        ring.style.opacity = '1';
+        ring.style.borderColor = 'var(--accent)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.opacity = '0.6';
+        ring.style.borderColor = 'var(--accent2)';
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(r => obs.observe(r));
+  </script>
+</body>
+</html>
